@@ -4,12 +4,15 @@ import { logger } from "hono/logger";
 import { telefunc, config } from "telefunc";
 import { glob } from "glob";
 import { createRequire } from "node:module";
+import { db } from "./database/db";
+
 const app = new Hono();
 app.use(cors());
 app.use(logger());
+
 const require = createRequire(import.meta.url);
 
-config.root = "C:\\Users\\gabri\\Projects\\worknet-tamagui";
+config.root = "C:\\Users\\gabri\\Projects\\worknet";
 config.disableNamingConvention = true;
 config.telefuncFiles = [];
 const files = await glob("./functions/**/*.telefunc.ts");
@@ -24,6 +27,7 @@ app.all("/_telefunc", async (c) => {
 		method: c.req.method,
 		body: await c.req.text(),
 		context: {
+			db: db,
 			...c,
 		},
 	});

@@ -3,5 +3,10 @@ import { defineConfig } from 'drizzle-kit';
 export default defineConfig({
   schema: './database/schema.ts',
   out: './drizzle',
-  dialect: 'sqlite', // 'postgresql' | 'mysql' | 'sqlite'
+  dialect: 'sqlite',
+  driver: 'turso',
+  dbCredentials: {
+    url: process.env.TURSO_CONNECTION_URL ?? "",
+    authToken: process.env.TURSO_AUTH_TOKEN ?? "",
+  },
 });

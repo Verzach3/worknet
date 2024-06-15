@@ -13,23 +13,121 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as StartQuestionsImport } from './routes/_start-questions'
+import { Route as HomeImport } from './routes/_home'
+import { Route as HomeJobCreateIdImport } from './routes/_home/job.create.$id'
+import { Route as HomeJobApplyIdImport } from './routes/_home/job.apply.$id'
 
 // Create Virtual Routes
 
+const RegisterLazyImport = createFileRoute('/register')()
+const LoginLazyImport = createFileRoute('/login')()
 const AboutLazyImport = createFileRoute('/about')()
 const IndexLazyImport = createFileRoute('/')()
+const TestIndexLazyImport = createFileRoute('/test/')()
+const HomeUserIndexLazyImport = createFileRoute('/_home/user/')()
+const HomeMainViewIndexLazyImport = createFileRoute('/_home/main-view/')()
+const HomeConfigIndexLazyImport = createFileRoute('/_home/config/')()
+const StartQuestionsQuestionsJobtypeLazyImport = createFileRoute(
+  '/_start-questions/questions/jobtype',
+)()
+const StartQuestionsQuestionsCountryLazyImport = createFileRoute(
+  '/_start-questions/questions/country',
+)()
+const HomeJobIdLazyImport = createFileRoute('/_home/job/$id')()
 
 // Create/Update Routes
+
+const RegisterLazyRoute = RegisterLazyImport.update({
+  path: '/register',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/register.lazy').then((d) => d.Route))
+
+const LoginLazyRoute = LoginLazyImport.update({
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/login.lazy').then((d) => d.Route))
 
 const AboutLazyRoute = AboutLazyImport.update({
   path: '/about',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/about.lazy').then((d) => d.Route))
 
+const StartQuestionsRoute = StartQuestionsImport.update({
+  id: '/_start-questions',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const HomeRoute = HomeImport.update({
+  id: '/_home',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const TestIndexLazyRoute = TestIndexLazyImport.update({
+  path: '/test/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/test/index.lazy').then((d) => d.Route))
+
+const HomeUserIndexLazyRoute = HomeUserIndexLazyImport.update({
+  path: '/user/',
+  getParentRoute: () => HomeRoute,
+} as any).lazy(() =>
+  import('./routes/_home/user/index.lazy').then((d) => d.Route),
+)
+
+const HomeMainViewIndexLazyRoute = HomeMainViewIndexLazyImport.update({
+  path: '/main-view/',
+  getParentRoute: () => HomeRoute,
+} as any).lazy(() =>
+  import('./routes/_home/main-view/index.lazy').then((d) => d.Route),
+)
+
+const HomeConfigIndexLazyRoute = HomeConfigIndexLazyImport.update({
+  path: '/config/',
+  getParentRoute: () => HomeRoute,
+} as any).lazy(() =>
+  import('./routes/_home/config/index.lazy').then((d) => d.Route),
+)
+
+const StartQuestionsQuestionsJobtypeLazyRoute =
+  StartQuestionsQuestionsJobtypeLazyImport.update({
+    path: '/questions/jobtype',
+    getParentRoute: () => StartQuestionsRoute,
+  } as any).lazy(() =>
+    import('./routes/_start-questions/questions/jobtype.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
+const StartQuestionsQuestionsCountryLazyRoute =
+  StartQuestionsQuestionsCountryLazyImport.update({
+    path: '/questions/country',
+    getParentRoute: () => StartQuestionsRoute,
+  } as any).lazy(() =>
+    import('./routes/_start-questions/questions/country.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
+const HomeJobIdLazyRoute = HomeJobIdLazyImport.update({
+  path: '/job/$id',
+  getParentRoute: () => HomeRoute,
+} as any).lazy(() => import('./routes/_home/job.$id.lazy').then((d) => d.Route))
+
+const HomeJobCreateIdRoute = HomeJobCreateIdImport.update({
+  path: '/job/create/$id',
+  getParentRoute: () => HomeRoute,
+} as any)
+
+const HomeJobApplyIdRoute = HomeJobApplyIdImport.update({
+  path: '/job/apply/$id',
+  getParentRoute: () => HomeRoute,
+} as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -42,12 +140,103 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/_home': {
+      id: '/_home'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof HomeImport
+      parentRoute: typeof rootRoute
+    }
+    '/_start-questions': {
+      id: '/_start-questions'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof StartQuestionsImport
+      parentRoute: typeof rootRoute
+    }
     '/about': {
       id: '/about'
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutLazyImport
       parentRoute: typeof rootRoute
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/test/': {
+      id: '/test/'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof TestIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/_home/job/$id': {
+      id: '/_home/job/$id'
+      path: '/job/$id'
+      fullPath: '/job/$id'
+      preLoaderRoute: typeof HomeJobIdLazyImport
+      parentRoute: typeof HomeImport
+    }
+    '/_start-questions/questions/country': {
+      id: '/_start-questions/questions/country'
+      path: '/questions/country'
+      fullPath: '/questions/country'
+      preLoaderRoute: typeof StartQuestionsQuestionsCountryLazyImport
+      parentRoute: typeof StartQuestionsImport
+    }
+    '/_start-questions/questions/jobtype': {
+      id: '/_start-questions/questions/jobtype'
+      path: '/questions/jobtype'
+      fullPath: '/questions/jobtype'
+      preLoaderRoute: typeof StartQuestionsQuestionsJobtypeLazyImport
+      parentRoute: typeof StartQuestionsImport
+    }
+    '/_home/config/': {
+      id: '/_home/config/'
+      path: '/config'
+      fullPath: '/config'
+      preLoaderRoute: typeof HomeConfigIndexLazyImport
+      parentRoute: typeof HomeImport
+    }
+    '/_home/main-view/': {
+      id: '/_home/main-view/'
+      path: '/main-view'
+      fullPath: '/main-view'
+      preLoaderRoute: typeof HomeMainViewIndexLazyImport
+      parentRoute: typeof HomeImport
+    }
+    '/_home/user/': {
+      id: '/_home/user/'
+      path: '/user'
+      fullPath: '/user'
+      preLoaderRoute: typeof HomeUserIndexLazyImport
+      parentRoute: typeof HomeImport
+    }
+    '/_home/job/apply/$id': {
+      id: '/_home/job/apply/$id'
+      path: '/job/apply/$id'
+      fullPath: '/job/apply/$id'
+      preLoaderRoute: typeof HomeJobApplyIdImport
+      parentRoute: typeof HomeImport
+    }
+    '/_home/job/create/$id': {
+      id: '/_home/job/create/$id'
+      path: '/job/create/$id'
+      fullPath: '/job/create/$id'
+      preLoaderRoute: typeof HomeJobCreateIdImport
+      parentRoute: typeof HomeImport
     }
   }
 }
@@ -56,7 +245,22 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
+  HomeRoute: HomeRoute.addChildren({
+    HomeJobIdLazyRoute,
+    HomeConfigIndexLazyRoute,
+    HomeMainViewIndexLazyRoute,
+    HomeUserIndexLazyRoute,
+    HomeJobApplyIdRoute,
+    HomeJobCreateIdRoute,
+  }),
+  StartQuestionsRoute: StartQuestionsRoute.addChildren({
+    StartQuestionsQuestionsCountryLazyRoute,
+    StartQuestionsQuestionsJobtypeLazyRoute,
+  }),
   AboutLazyRoute,
+  LoginLazyRoute,
+  RegisterLazyRoute,
+  TestIndexLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -68,14 +272,78 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/about"
+        "/_home",
+        "/_start-questions",
+        "/about",
+        "/login",
+        "/register",
+        "/test/"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
     },
+    "/_home": {
+      "filePath": "_home.tsx",
+      "children": [
+        "/_home/job/$id",
+        "/_home/config/",
+        "/_home/main-view/",
+        "/_home/user/",
+        "/_home/job/apply/$id",
+        "/_home/job/create/$id"
+      ]
+    },
+    "/_start-questions": {
+      "filePath": "_start-questions.tsx",
+      "children": [
+        "/_start-questions/questions/country",
+        "/_start-questions/questions/jobtype"
+      ]
+    },
     "/about": {
       "filePath": "about.lazy.tsx"
+    },
+    "/login": {
+      "filePath": "login.lazy.tsx"
+    },
+    "/register": {
+      "filePath": "register.lazy.tsx"
+    },
+    "/test/": {
+      "filePath": "test/index.lazy.tsx"
+    },
+    "/_home/job/$id": {
+      "filePath": "_home/job.$id.lazy.tsx",
+      "parent": "/_home"
+    },
+    "/_start-questions/questions/country": {
+      "filePath": "_start-questions/questions/country.lazy.tsx",
+      "parent": "/_start-questions"
+    },
+    "/_start-questions/questions/jobtype": {
+      "filePath": "_start-questions/questions/jobtype.lazy.tsx",
+      "parent": "/_start-questions"
+    },
+    "/_home/config/": {
+      "filePath": "_home/config/index.lazy.tsx",
+      "parent": "/_home"
+    },
+    "/_home/main-view/": {
+      "filePath": "_home/main-view/index.lazy.tsx",
+      "parent": "/_home"
+    },
+    "/_home/user/": {
+      "filePath": "_home/user/index.lazy.tsx",
+      "parent": "/_home"
+    },
+    "/_home/job/apply/$id": {
+      "filePath": "_home/job.apply.$id.tsx",
+      "parent": "/_home"
+    },
+    "/_home/job/create/$id": {
+      "filePath": "_home/job.create.$id.tsx",
+      "parent": "/_home"
     }
   }
 }
